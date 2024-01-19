@@ -21,21 +21,21 @@ class Processor {
     private ConfigKeys configKeys = new ConfigKeys();
     private final Logger logger = Logger.getLogger(Processor.class.getName());
     public boolean delete(Page page) {
-        if (deletePage(page)) {
-            if (registry.deleteReference(page.name)) {
-                if (configKeys.deleteKey(page.name)) {
-                    logger.info("page deleted");
-                } else {
-                    logger.info("configKey not deleted");
-                }
-            } else {
-                logger.info("deleteReference from registry failed");
-            }
-        } else {
+        if (!deletePage(page)){
             logger.info("delete failed");
-            return false;
+            return false;            
         }
-        return true;
+        if (!registry.deleteReference(page.name)){
+            logger.info("deleteReference from registry failed");
+            return true;
+        }
+        if (configKeys.deleteKey(page.name)) {
+            logger.info("page deleted");
+            return true;
+        } else {
+            logger.info("configKey not deleted");
+            return true;
+        }
     }
     private boolean deletePage(Page page) {
         return true;

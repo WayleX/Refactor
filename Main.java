@@ -1,5 +1,27 @@
 import java.util.*;
 
+enum NumberRepresentation {
+    ZERO("0","zero"),
+    ONE("one", "1", "１", "一", "일"),
+    TWO("two", "2", "２", "二", "이"),
+    THREE("three", "3", "３", "三", "삼");
+
+    private final List<String> representations;
+
+    NumberRepresentation(String... representations) {
+        this.representations = List.of(representations);
+    }
+
+    public static NumberRepresentation find(String input) {
+        for (NumberRepresentation value : values()) {
+            if (value.representations.contains(input.toLowerCase())) {
+                return value;
+            }
+        }
+        return null;
+    }
+}
+
 class User {
     private final String name;
     private final String email;
@@ -35,19 +57,11 @@ public class Main {
 
     public static List<Integer> task3(List<String> results) {
         List<Integer> arr = new ArrayList<>();
-        int number = -1;
         for (String res : results) {
-            if (res.toLowerCase().contains("three") || res.contains("3") || res.contains("３")
-                    || res.contains("三") || res.contains("삼")) {
-                number = 3;
-            } else if (res.toLowerCase().contains("two") || res.contains("2") ||
-                    res.contains("２") || res.contains("二") || res.contains("이")) {
-                number = 2;
-            } else if (res.toLowerCase().contains("one") || res.contains("1") ||
-                    res.contains("１") || res.contains("一") || res.contains("일")) {
-                number = 1;
+            NumberRepresentation number = NumberRepresentation.find(res);
+            if (res != null){
+                arr.add(number.ordinal());
             }
-            arr.add(number);
         }
         return arr;
     }
